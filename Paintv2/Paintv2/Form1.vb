@@ -2,9 +2,12 @@
     Private m_Previous As System.Nullable(Of Point) = Nothing
     Dim m_shapes As New Collection
     Dim c As Color
+    Dim t As Integer
+    Dim type As String
     Dim w As Integer
-
-
+    Dim h As Integer
+    Dim s As Integer
+    Dim r As Integer
     Private Sub pictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
         m_Previous = e.Location
         pictureBox1_MouseMove(sender, e)
@@ -12,9 +15,58 @@
 
     Private Sub pictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
         If m_Previous IsNot Nothing Then
-            Dim l As New Line(PictureBox1.Image, m_Previous, e.Location)
-            l.Pen = New Pen(c, w)
-            m_shapes.Add(l)
+            Dim d As Object
+
+            If type = "Line" Then
+                d = New Line(PictureBox1.Image, m_Previous, e.Location)
+                d.Pen = New Pen(c, t)
+            End If
+            If type = "Rectangle" Then
+                d = New MyRect(PictureBox1.Image, m_Previous, e.Location)
+                d.fill = CheckBox1.Checked
+                d.color1 = Button2.BackColor
+                d.color2 = Button3.BackColor
+                d.Pen = New Pen(c, t)
+                d.h = h
+                d.w = w
+            End If
+            If type = "Arc" Then
+                d = New Arc(PictureBox1.Image, m_Previous, e.Location)
+                d.Pen = New Pen(c, t)
+                d.h = h
+                d.w = w
+            End If
+            If type = "Pie" Then
+                d = New Pie(PictureBox1.Image, m_Previous, e.Location)
+                d.Pen = New Pen(c, t)
+                d.h = h
+                d.w = w
+            End If
+            If type = "Pentagon" Then
+                d = New Petagon(PictureBox1.Image, m_Previous, e.Location)
+                d.Pen = New Pen(c, t)
+                d.h = h
+                d.w = w
+            End If
+            If type = "n-gon" Then
+                d = New Ngon(PictureBox1.Image, m_Previous, e.Location)
+                d.Pen = New Pen(c, t)
+                d.s = s
+                d.r = r
+            End If
+            If type = "Picture" Then
+                d = New Picture(PictureBox1.Image, m_Previous, e.Location)
+                d.h = h
+                d.w = w
+                d.picture = PictureBox2.Image
+            End If
+            If type = "Circle" Then
+                d = New Circle(PictureBox1.Image, m_Previous, e.Location)
+                d.pen = New Pen(c, t)
+                d.w = w
+                d.h = h
+            End If
+            m_shapes.Add(d)
             PictureBox1.Invalidate()
             m_Previous = e.Location
         End If
@@ -35,7 +87,7 @@
     End Sub
 
     Private Sub PictureBox1_Paint(sender As Object, e As PaintEventArgs) Handles PictureBox1.Paint
-        For Each s As Line In m_shapes
+        For Each s As Object In m_shapes
             s.Draw()
         Next
     End Sub
@@ -81,5 +133,66 @@
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         c = sender.backcolor
+    End Sub
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        w = TrackBar1.Value
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        type = "Line"
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        type = "Rectangle"
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        type = "Arc"
+    End Sub
+
+    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
+        type = "Pie"
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        PictureBox1.Image.Save(SaveFileDialog1.FileName)
+    End Sub
+
+    Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
+        SaveFileDialog1.ShowDialog()
+    End Sub
+
+    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
+        type = "Pentagon"
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        type = "n-gon"
+    End Sub
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        type = "Picture"
+    End Sub
+    Private Sub TrackBar2_Scroll(sender As Object, e As EventArgs) Handles TrackBar2.Scroll
+        h = TrackBar2.Value
+    End Sub
+    Private Sub TrackBar3_Scroll(sender As Object, e As EventArgs) Handles TrackBar3.Scroll
+        w = TrackBar3.Value
+    End Sub
+    Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
+        type = "Circle"
+    End Sub
+    Private Sub TrackBar4_Scroll(sender As Object, e As EventArgs) Handles TrackBar4.Scroll
+        s = TrackBar4.Value
+    End Sub
+    Private Sub TrackBar5_Scroll(sender As Object, e As EventArgs) Handles TrackBar5.Scroll
+        r = TrackBar5.Value
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+
     End Sub
 End Class
